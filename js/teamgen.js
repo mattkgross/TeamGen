@@ -85,7 +85,45 @@ function renderTeams()
 	var r2 = getRatings(players, 2, true);
 	var r1 = getRatings(players, 1, true);
 
+	// Make the relevant teams visible.
+	for(var i = 1; i <= num_teams; i++) {
+	  var t_name = "#col" + i.toString();
+	  $(t_name).css("display", "block");
+	};
 
+	while((r5.length + r4.length + r3.length + r2.length + r1.length) > 0) {
+	  for(var i = 1; i <= num_teams; i++) {
+	  	var cur_col = "#col" + i.toString();
+	  	var elem;
+
+	  	// To make this more even, we cycle through 5, 1, 2, 4, 3.
+	  	// Otherwise, the 1st team will always have the best players
+	  	// whereas teams 2-12 may end up being the start of a new rank cycle.
+	  	if(r5.length > 0) {
+	  	  elem = r5.pop();
+	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
+	  	}
+	  	else if(r1.length > 0) {
+	  	  elem = r1.pop();
+	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
+	  	}
+	  	else if(r2.length > 0) {
+	  	  elem = r2.pop();
+	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
+	  	}
+	  	else if(r4.length > 0) {
+	  	  elem = r4.pop();
+	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
+	  	}
+	  	else if(r3.length > 0) {
+	  	  elem = r3.pop();
+	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
+	  	}
+	  	else {
+	  	  break;
+	  	}
+	  };
+	};
 }
 
 function createCSV()
@@ -141,7 +179,7 @@ function randomIntFromInterval(min, max)
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function getRatings(deck, rating, shuffle)
+function getRatings(deck, rating, randomize)
 {
 	var new_deck = [];
 	for (var i = 0; i < deck.length; i++) {
@@ -150,7 +188,7 @@ function getRatings(deck, rating, shuffle)
 	  }
 	};
 
-	if(shuffle) {
+	if(randomize) {
 		new_deck = shuffle(new_deck, 100);
 	}
 
