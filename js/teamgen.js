@@ -85,7 +85,7 @@ function renderTeams()
 	var r2 = getRatings(players, 2, true);
 	var r1 = getRatings(players, 1, true);
 
-	
+
 }
 
 function createCSV()
@@ -143,7 +143,7 @@ function randomIntFromInterval(min, max)
 
 function getRatings(deck, rating, shuffle)
 {
-	var new_deck = {};
+	var new_deck = [];
 	for (var i = 0; i < deck.length; i++) {
 	  if(deck[i].rating == rating) {
 	  	new_deck.push(deck[i]);
