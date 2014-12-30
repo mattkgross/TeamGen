@@ -73,6 +73,10 @@ function renderTeams()
 		createCSV();
 	}
 
+	// Here, we shuffle the entries so that, when sorted by rank, the subsets are randomized.
+	// If needed, shuffle may then be used on each subset for further randomization.
+	var players = shuffle(JSON.parse(localStorage.getItem('playerPool')));
+
 	
 }
 
@@ -82,7 +86,7 @@ function createCSV()
 	var csvContent = "First Name,Last Name,Email,Rating\n";
 
 	for (var i = 0; i < data.length; i++) {
-		csvContent += data[i].fname + "," + data[i].lname + "," + data[i].email + "," + data[i].rating + "\n";
+	  csvContent += data[i].fname + "," + data[i].lname + "," + data[i].email + "," + data[i].rating + "\n";
 	};
 
 	// Source: https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
@@ -103,4 +107,29 @@ function createCSV()
 	      document.body.removeChild(link);
 	  }
     }
+}
+
+function shuffle(deck)
+{
+	var tolerance = 200;
+	var end = deck.length - 1;
+
+	for (var i = 0; i < tolerance; i++) {
+	  first = randomIntFromInterval(0, end);
+	  second = randomIntFromInterval(0, end);
+
+	  if(first != second) {
+	    temp = deck[first];
+	    deck[first] = deck[second];
+	    deck[second] = temp;
+	  }
+	};
+
+	return deck;
+}
+
+// Source: https://stackoverflow.com/questions/4959975/generate-random-value-between-two-numbers-in-javascript
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random() * (max-min + 1) + min);
 }
