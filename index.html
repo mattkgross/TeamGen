@@ -49,8 +49,10 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+            </form>
           </div>
           <div class="col-lg-10 col-lg-offset-1">
+            <form class="form-inline">
               <br><br>
               <div class="form-actions" style="text-align: center;">
                 <button type="button" class="btn btn-primary" onclick="playerAdd()">Add Player</button>
@@ -59,34 +61,45 @@
             </form>
           </div>
         </div>
-      </div>
 
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+        <br><hr><br>
 
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        <h1 style="text-align: center;">Generate Teams</h1><br>
+        <div class="row">
+          <div class="col-lg-3 col-lg-offset-5">
+            <form class="form-inline">
+              <select class="form-control" id="num_teams">
+                <option value="" selected disabled>Number of Teams</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+              <br><br>
+              <input type="checkbox" id="csv_dl"> Download Data as a CSV. 
+            </form>
+          </div>
+          <div class="col-lg-10 col-lg-offset-1">
+            <form class="form-inline" action="teams.html">
+              <br>
+              <div class="form-actions" style="text-align: center;">
+                <button type="submit" class="btn btn-primary" onclick="">Generate Teams</button>
+                <button type="button" class="btn btn-danger" onclick="clearTeam(); alert('Current Team Cleared.');">Delete Current Team</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
       <footer class="footer">
-        <br><br><p>&copy; Matthew Gross 2014</p>
+        <br><br><p style="text-align: center;">&copy; Matthew Gross 2014</p>
       </footer>
 
     </div> <!-- /container -->
