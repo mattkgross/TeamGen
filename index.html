@@ -66,30 +66,26 @@
 
         <h1 style="text-align: center;">Generate Teams</h1><br>
         <div class="row">
-          <div class="col-lg-3 col-lg-offset-5">
-            <form class="form-inline">
-              <select class="form-control" id="num_teams">
-                <option value="" selected disabled>Number of Teams</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-              </select>
-              <br><br>
-              <input type="checkbox" id="csv_dl"> Download Data as a CSV. 
-            </form>
-          </div>
           <div class="col-lg-10 col-lg-offset-1">
-            <form class="form-inline" action="teams.html">
-              <br>
+            <form class="form-inline" action="teams.html" method="get">
               <div class="form-actions" style="text-align: center;">
+                <select class="form-control" id="num_teams" name="num_teams">
+                  <option value="" selected disabled>Number of Teams</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>
+                <br><br>
+                <input type="checkbox" id="csv_dl" name="csv_dl"> Download Data as a CSV.
+                <br><br>
                 <button type="submit" class="btn btn-primary" onclick="">Generate Teams</button>
                 <button type="button" class="btn btn-danger" onclick="clearTeam(); alert('Current Team Cleared.');">Delete Current Team</button>
               </div>

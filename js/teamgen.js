@@ -57,3 +57,50 @@ function playerAdd()
 	// Now that we're done, clear the form.
 	clearForm();
 }
+
+// Source: https://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
+function renderTeams()
+{
+	var num_teams = getURLParameter('num_teams');
+	var csv_dl = getURLParameter('csv_dl');
+
+	// Generate CSV.
+	if(csv_dl == "on") {
+		createCSV();
+	}
+
+	
+}
+
+function createCSV()
+{
+	var data = JSON.parse(localStorage.getItem('playerPool'));
+	var csvContent = "First Name,Last Name,Email,Rating\n";
+
+	for (var i = 0; i < data.length; i++) {
+		csvContent += data[i].fname + "," + data[i].lname + "," + data[i].email + "," + data[i].rating + "\n";
+	};
+
+	// Source: https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
+	var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+      navigator.msSaveBlob(blob, "players.csv");
+    }
+    else {
+	  var link = document.createElement("a");
+	  if (link.download !== undefined) { // feature detection
+	      // Browsers that support HTML5 download attribute
+	      var url = URL.createObjectURL(blob);
+	      link.setAttribute("href", url);
+	      link.setAttribute("download", "players.csv");
+	      link.style = "visibility:hidden";
+	      document.body.appendChild(link);
+	      link.click();
+	      document.body.removeChild(link);
+	  }
+    }
+}
