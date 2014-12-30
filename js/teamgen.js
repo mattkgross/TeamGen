@@ -68,6 +68,12 @@ function renderTeams()
 	var num_teams = getURLParameter('num_teams');
 	var csv_dl = getURLParameter('csv_dl');
 
+	if(num_teams == null) {
+		alert('Dude... you need to select how many teams you want to create.');
+		window.location.href = "index.html";
+		return;
+	}
+
 	// Generate CSV.
 	if(csv_dl == "on") {
 		createCSV();
@@ -193,4 +199,13 @@ function getRatings(deck, rating, randomize)
 	}
 
 	return new_deck;
+}
+
+function startOver()
+{
+	var choice = confirm('Are you sure you want to erase all the current players and start over? This is not reversible. All data will be lost.');
+	if(choice) {
+		clearTeam();
+		window.location.href = "index.html";
+	}
 }
