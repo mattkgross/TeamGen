@@ -13,9 +13,6 @@
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="jumbotron-narrow.css" rel="stylesheet">
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -37,9 +34,25 @@
       </div>
 
       <div class="jumbotron">
-        <h1>Jumbotron heading</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+        <h1>Add Players</h1>
+        <form class="form-inline">
+          <input type="text" class="input-medium" id="fname" placeholder="First Name">&emsp;
+          <input type="text" class="input-medium" id="lname" placeholder="Last Name">&emsp;
+          <input type="text" class="input-medium" id="email" placeholder="Email">&emsp;
+          <select id="rating">
+            <option value="" selected disabled>Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <br><br>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary">Add Player</button>
+            <button type="button" class="btn">Clear</button>
+          </div>
+        </form>
       </div>
 
       <div class="row marketing">
@@ -67,13 +80,10 @@
       </div>
 
       <footer class="footer">
-        <p>&copy; Company 2014</p>
+        <br><br><p>&copy; Matthew Gross 2014</p>
       </footer>
 
     </div> <!-- /container -->
 
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
