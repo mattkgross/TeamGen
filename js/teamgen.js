@@ -60,7 +60,7 @@ function playerAdd()
 
 // Source: https://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
 function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
 function renderTeams()
@@ -75,7 +75,15 @@ function renderTeams()
 
 	// Here, we shuffle the entries so that, when sorted by rank, the subsets are randomized.
 	// If needed, shuffle may then be used on each subset for further randomization.
-	var players = shuffle(JSON.parse(localStorage.getItem('playerPool')));
+	var players = shuffle(JSON.parse(localStorage.getItem('playerPool')), 200);
+
+	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
+	// so I'm not going to worry about O(5n) versus O(5n - x).
+	var r5 = getRatings(players, 5, true);
+	var r4 = getRatings(players, 4, true);
+	var r3 = getRatings(players, 3, true);
+	var r2 = getRatings(players, 2, true);
+	var r1 = getRatings(players, 1, true);
 
 	
 }
@@ -109,9 +117,8 @@ function createCSV()
     }
 }
 
-function shuffle(deck)
+function shuffle(deck, tolerance)
 {
-	var tolerance = 200;
 	var end = deck.length - 1;
 
 	for (var i = 0; i < tolerance; i++) {
@@ -129,7 +136,23 @@ function shuffle(deck)
 }
 
 // Source: https://stackoverflow.com/questions/4959975/generate-random-value-between-two-numbers-in-javascript
-function randomIntFromInterval(min,max)
+function randomIntFromInterval(min, max)
 {
-    return Math.floor(Math.random() * (max-min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRatings(deck, rating, shuffle)
+{
+	var new_deck = {};
+	for (var i = 0; i < deck.length; i++) {
+	  if(deck[i].rating == rating) {
+	  	new_deck.push(deck[i]);
+	  }
+	};
+
+	if(shuffle) {
+		new_deck = shuffle(new_deck, 100);
+	}
+
+	return new_deck;
 }
