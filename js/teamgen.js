@@ -195,7 +195,7 @@ function getRatings(deck, rating, randomize)
 	};
 
 	if(randomize) {
-		new_deck = shuffle(new_deck, 100);
+	  new_deck = shuffle(new_deck, 100);
 	}
 
 	return new_deck;
@@ -205,7 +205,26 @@ function startOver()
 {
 	var choice = confirm('Are you sure you want to erase all the current players and start over? This is not reversible. All data will be lost.');
 	if(choice) {
-		clearTeam();
-		window.location.href = "index.html";
+	  clearTeam();
+	  window.location.href = "index.html";
 	}
+}
+
+function editPlayers()
+{
+    var list_players = JSON.parse(localStorage.getItem('playerPool'));
+    $('#cur_players').empty();
+    $('#cur_players').append("<tr><td><strong>First Name</strong></td><td><strong>Last Name</strong></td><td><strong>Email</strong></td><td><strong>Rating</strong></td></tr>");
+
+    for (var i = 0; i < list_players.length; i++) {
+      $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + list_players[i].rating + "</td><td><button type=\"button\" class=\"close\" style=\"float: none;\" onclick=\"deletePlayer(" + i + ")\">&times;</button></td></tr>");
+    };
+}
+
+function deletePlayer(index)
+{
+	var list_players = JSON.parse(localStorage.getItem('playerPool'));
+	list_players.splice(index, 1);
+	localStorage.setItem('playerPool', JSON.stringify(list_players));
+	editPlayers();
 }

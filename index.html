@@ -28,14 +28,7 @@
     $(document).ready(function(e) {
       // Populate the modal with the info from the box clicked to edit
       $('#view_players').click(function(e) {
-        var list_players = JSON.parse(localStorage.getItem('playerPool'));
-        $('#cur_players').empty();
-        $('#cur_players').append("<tr><td><strong>First Name</strong></td><td><strong>Last Name</strong></td><td><strong>Email</strong></td><td><strong>Rating</strong></td></tr>");
-
-        for (var i = 0; i < list_players.length; i++) {
-          $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + list_players[i].rating + "</td></tr>");
-        };
-
+        editPlayers();
         $('#myModal').modal('show');
       });
     });
