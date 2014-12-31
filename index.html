@@ -26,16 +26,29 @@
 
   <script type="text/javascript">
     $(document).ready(function(e) {
+      // Hide alerts.
+      $('#data_check').hide();
+
       // Populate the modal with the info from the box clicked to edit
       $('#view_players').click(function(e) {
         editPlayers();
         $('#myModal').modal('show');
       });
+
+      // Check for pre-existing data and warn.
+      sessionCheck();
     });
   </script>
   </head>
 
   <body>
+
+    <div class="alert alert-warning alert-dismissible fade in" role="alert" id="data_check" style="text-align: center;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      It appears that you still have an existing team stored since you last exited this app. Do you want to <a href="#" class="alert-link" onclick="clearTeam(); $('#data_check').alert('close')">get rid of it and start fresh</a>?
+    </div>
 
     <div class="container">
       <div class="header">

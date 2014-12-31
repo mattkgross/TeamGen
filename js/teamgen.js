@@ -228,3 +228,15 @@ function deletePlayer(index)
 	localStorage.setItem('playerPool', JSON.stringify(list_players));
 	editPlayers();
 }
+
+function sessionCheck()
+{
+	var exist = JSON.parse(localStorage.getItem('playerPool')).length;
+	
+	// If it is a new browser session and the team is still here, warn them.
+	if(sessionStorage.players_set != "existing" && exist > 0) {
+		$('#data_check').show();
+	}
+
+	sessionStorage.players_set = "existing";
+}
