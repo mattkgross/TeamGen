@@ -9,6 +9,19 @@ function clearForm()
 	$('#lname').val('');
 	$('#email').val('');
 	$('#rating').val('');
+	$('#fname').fadeIn();
+	$('#lname').fadeIn();
+	$('#email').fadeIn();
+	$('#rating').fadeIn();
+	$('#fname').focus();
+}
+
+function addComplete()
+{
+	$('#fname').fadeOut(400);
+	$('#lname').fadeOut(400);
+	$('#email').fadeOut(400);
+	$('#rating').fadeOut(400, clearForm);	
 }
 
 function playerAdd()
@@ -55,7 +68,7 @@ function playerAdd()
 	//console.log(playerPool);
 
 	// Now that we're done, clear the form.
-	clearForm();
+	addComplete();
 }
 
 // Source: https://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
@@ -216,9 +229,11 @@ function editPlayers()
     $('#cur_players').empty();
     $('#cur_players').append("<tr><td><strong>First Name</strong></td><td><strong>Last Name</strong></td><td><strong>Email</strong></td><td><strong>Rating</strong></td></tr>");
 
-    for (var i = 0; i < list_players.length; i++) {
-      $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + list_players[i].rating + "</td><td><button type=\"button\" class=\"close\" style=\"float: none;\" onclick=\"deletePlayer(" + i + ")\">&times;</button></td></tr>");
-    };
+    if(list_players != null) {
+	  for (var i = 0; i < list_players.length; i++) {
+	    $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + list_players[i].rating + "</td><td><button type=\"button\" class=\"close\" style=\"float: none;\" onclick=\"deletePlayer(" + i + ")\">&times;</button></td></tr>");
+	  };
+	}
 }
 
 function deletePlayer(index)
@@ -231,7 +246,7 @@ function deletePlayer(index)
 
 function sessionCheck()
 {
-	var exist = JSON.parse(localStorage.getItem('playerPool')).length;
+	var exist = (JSON.parse(localStorage.getItem('playerPool')) == null) ? 0 : JSON.parse(localStorage.getItem('playerPool')).length;
 	
 	// If it is a new browser session and the team is still here, warn them.
 	if(sessionStorage.players_set != "existing" && exist > 0) {
