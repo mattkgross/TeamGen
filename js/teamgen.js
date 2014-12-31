@@ -1,3 +1,34 @@
+/*
+TeamGen
+===========
+
+Developer: Matthew Gross
+Email: mattkgross@gmail.com
+Website: http://www.mattkgross.com
+Repository: https://github.com/mattkgross/TeamGen
+Disclaimer: The author of this tool is not responsible for any misuse, loss, or distribution of data or information associated with this site.
+This product is provided AS IS and, by using this software, the site owner agrees to all responsibility resulting from any actions taken when using this service.
+Rights: This software is openly distributed and may be used, altered, and redistributed so long as credit remains given where it is due.
+
+Copyright (C) 2014  Matthew Gross
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+=================================================================================================================================================================
+*/
+
 function clearTeam()
 {
 	localStorage.removeItem('playerPool');
@@ -59,7 +90,13 @@ function playerAdd()
 	player.email = $('#email').val();
 	player.rating = $('#rating').val();
 
-	playerPool.push(player);
+	if(!checkDup(player.fname, player.lname)) {
+	  playerPool.push(player);
+	}
+	else {
+		alert('The player you entered already exists.');
+		return;
+	}
 
 	// Set to local storage.
 	localStorage.setItem('playerPool', JSON.stringify(playerPool));
@@ -69,6 +106,22 @@ function playerAdd()
 
 	// Now that we're done, clear the form.
 	addComplete();
+}
+
+function checkDup(fname, lname)
+{
+	var playerPool = JSON.parse(localStorage.getItem('playerPool'));
+
+	if(playerPool == null)
+		return false;
+
+	for(var i = 0; i < playerPool.length; i++) {
+	  if(playerPool[i].fname == fname && playerPool[i].lname == lname) {
+	  	return true;
+	  }
+	}
+
+	return false;
 }
 
 // Source: https://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript
