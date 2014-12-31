@@ -255,3 +255,8 @@ function sessionCheck()
 
 	sessionStorage.players_set = "existing";
 }
+
+function teamRegen()
+{
+	window.location.href="teams.html?num_teams=" + getURLParameter('num_teams');
+}
