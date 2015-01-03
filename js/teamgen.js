@@ -39,10 +39,14 @@ function clearForm()
 	$('#fname').val('');
 	$('#lname').val('');
 	$('#email').val('');
+	$('#ft').val('');
+	$('#in').val('');
 	$('#rating').val('');
 	$('#fname').fadeIn();
 	$('#lname').fadeIn();
 	$('#email').fadeIn();
+	$('#ft').fadeIn();
+	$('#in').fadeIn();
 	$('#rating').fadeIn();
 	$('#fname').focus();
 }
@@ -52,6 +56,8 @@ function addComplete()
 	$('#fname').fadeOut(400);
 	$('#lname').fadeOut(400);
 	$('#email').fadeOut(400);
+	$('#ft').fadeOut(400);
+	$('#in').fadeOut(400);
 	$('#rating').fadeOut(400, clearForm);	
 }
 
@@ -59,16 +65,24 @@ function playerAdd()
 {
 	// Sanity check.
 	if($('#fname').val() == '') {
-		alert('Dude... Enter a first name, tho.')
+		alert('Dude... Enter a first name, tho.');
 		return;
 	}
 	else if($('#lname').val() == '') {
-		alert('Dude... Enter a last name, tho.')
+		alert('Dude... Enter a last name, tho.');
 		return;
 	}
 	// Exclude the email check for now.
+	else if($('#ft').val() == null) {
+		alert('Dude... Enter a height, tho.');
+		return;
+	}
+	else if($('#in').val() == null) {
+		alert('Dude... Enter a height, tho.');
+		return;
+	}
 	else if($('#rating').val() == null) {
-		alert('Dude... Enter a rating, tho.')
+		alert('Dude... Enter a rating, tho.');
 		return;
 	}
 
@@ -88,7 +102,8 @@ function playerAdd()
 	player.fname = $('#fname').val();
 	player.lname = $('#lname').val();
 	player.email = $('#email').val();
-	player.rating = $('#rating').val();
+	player.height = parseInt($('#ft').val())*12 + parseInt($('#in').val());
+	player.rating = parseFloat($('#rating').val())*2;
 
 	if(!checkDup(player.fname, player.lname)) {
 	  playerPool.push(player);
@@ -151,11 +166,15 @@ function renderTeams()
 
 	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
 	// so I'm not going to worry about O(5n) versus O(5n - x).
+	var r10 = getRatings(players, 10, true);
+	var r9 = getRatings(players, 9, true);
+	var r8 = getRatings(players, 8, true);
+	var r7 = getRatings(players, 7, true);
+	var r6 = getRatings(players, 6, true);
 	var r5 = getRatings(players, 5, true);
 	var r4 = getRatings(players, 4, true);
 	var r3 = getRatings(players, 3, true);
 	var r2 = getRatings(players, 2, true);
-	var r1 = getRatings(players, 1, true);
 
 	// Make the relevant teams visible.
 	for(var i = 1; i <= num_teams; i++) {
@@ -163,19 +182,16 @@ function renderTeams()
 	  $(t_name).css("display", "block");
 	};
 
-	while((r5.length + r4.length + r3.length + r2.length + r1.length) > 0) {
+	while((r10.length + r9.length + r8.length + r7.length + r6.length + r5.length + r4.length + r3.length + r2.length) > 0) {
 	  for(var i = 1; i <= num_teams; i++) {
 	  	var cur_col = "#col" + i.toString();
 	  	var elem;
 
-	  	// To make this more even, we cycle through 5, 1, 2, 4, 3.
+	  	// To make this more even, we cycle through 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5.
 	  	// Otherwise, the 1st team will always have the best players
 	  	// whereas teams 2-12 may end up being the start of a new rank cycle.
-	  	if(r5.length > 0) {
-	  	  elem = r5.pop();
-	  	}
-	  	else if(r1.length > 0) {
-	  	  elem = r1.pop();
+	  	if(r10.length > 0) {
+	  	  elem = r10.pop();
 	  	}
 	  	else if(r2.length > 0) {
 	  	  elem = r2.pop();
@@ -183,15 +199,31 @@ function renderTeams()
 	  	else if(r4.length > 0) {
 	  	  elem = r4.pop();
 	  	}
+	  	else if(r8.length > 0) {
+	  	  elem = r8.pop();
+	  	}
+	  	else if(r6.length > 0) {
+	  	  elem = r6.pop();
+	  	}
+	  	else if(r9.length > 0) {
+	  	  elem = r9.pop();
+	  	}
 	  	else if(r3.length > 0) {
 	  	  elem = r3.pop();
+	  	}
+	  	else if(r5.length > 0) {
+	  	  elem = r5.pop();
+	  	}
+	  	else if(r7.length > 0) {
+	  	  elem = r7.pop();
 	  	}
 	  	else {
 	  	  break;
 	  	}
 
 	  	// Output the player.
-	  	$(cur_col).append("<br>" + elem.fname + " " + elem.lname + " (" + elem.rating + ")");
+	  	var em = (elem.email == "") ? "": ", " + elem.email;
+	  	$(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ")</span>");
 	  };
 	};
 }
@@ -202,7 +234,7 @@ function createCSV()
 	var csvContent = "First Name,Last Name,Email,Rating\n";
 
 	for (var i = 0; i < data.length; i++) {
-	  csvContent += data[i].fname + "," + data[i].lname + "," + data[i].email + "," + data[i].rating + "\n";
+	  csvContent += data[i].fname + "," + data[i].lname + "," + data[i].email + "," + parseFloat(data[i].rating)/2 + "\n";
 	};
 
 	// Source: https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
@@ -278,13 +310,18 @@ function editPlayers()
 {
     var list_players = JSON.parse(localStorage.getItem('playerPool'));
     $('#cur_players').empty();
-    $('#cur_players').append("<tr><td><strong>First Name</strong></td><td><strong>Last Name</strong></td><td><strong>Email</strong></td><td><strong>Rating</strong></td></tr>");
+    $('#cur_players').append("<tr><td><strong>First Name</strong></td><td><strong>Last Name</strong></td><td><strong>Email</strong></td><td><strong>Height</strong></td><td><strong>Rating</strong></td></tr>");
 
     if(list_players != null) {
 	  for (var i = 0; i < list_players.length; i++) {
-	    $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + list_players[i].rating + "</td><td><button type=\"button\" class=\"close\" style=\"float: none;\" onclick=\"deletePlayer(" + i + ")\">&times;</button></td></tr>");
+	    $('#cur_players').append("<tr><td>" + list_players[i].fname + "</td><td>" + list_players[i].lname + "</td><td>" + list_players[i].email + "</td><td>" + getHeight(list_players[i].height) + "</td><td>" + parseFloat(list_players[i].rating)/2 + "</td><td><button type=\"button\" class=\"close\" style=\"float: none;\" onclick=\"deletePlayer(" + i + ")\">&times;</button></td></tr>");
 	  };
 	}
+}
+
+function getHeight(inches)
+{
+	return Math.floor(inches/12) + "' " + (inches%12) + "\"";
 }
 
 function deletePlayer(index)
