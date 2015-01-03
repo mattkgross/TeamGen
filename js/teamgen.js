@@ -173,27 +173,25 @@ function renderTeams()
 	  	// whereas teams 2-12 may end up being the start of a new rank cycle.
 	  	if(r5.length > 0) {
 	  	  elem = r5.pop();
-	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
 	  	}
 	  	else if(r1.length > 0) {
 	  	  elem = r1.pop();
-	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
 	  	}
 	  	else if(r2.length > 0) {
 	  	  elem = r2.pop();
-	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
 	  	}
 	  	else if(r4.length > 0) {
 	  	  elem = r4.pop();
-	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
 	  	}
 	  	else if(r3.length > 0) {
 	  	  elem = r3.pop();
-	  	  $(cur_col).append("<br>" + elem.fname + " " + elem.lname);
 	  	}
 	  	else {
 	  	  break;
 	  	}
+
+	  	// Output the player.
+	  	$(cur_col).append("<br>" + elem.fname + " " + elem.lname + " (" + elem.rating + ")");
 	  };
 	};
 }
