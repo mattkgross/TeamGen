@@ -29,6 +29,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 =================================================================================================================================================================
 */
 
+// Data types & enums
+SexEnum = {
+    MALE : 0,
+    FEMALE : 1
+}
+
 function clearTeam()
 {
 	localStorage.removeItem('playerPool');
@@ -42,12 +48,14 @@ function clearForm()
 	$('#ft').val('');
 	$('#in').val('');
 	$('#rating').val('');
+	$('#sex').val('');
 	$('#fname').fadeIn();
 	$('#lname').fadeIn();
 	$('#email').fadeIn();
 	$('#ft').fadeIn();
 	$('#in').fadeIn();
 	$('#rating').fadeIn();
+	$('#sex').fadeIn();
 	$('#fname').focus();
 }
 
@@ -58,7 +66,8 @@ function addComplete()
 	$('#email').fadeOut(400);
 	$('#ft').fadeOut(400);
 	$('#in').fadeOut(400);
-	$('#rating').fadeOut(400, clearForm);	
+	$('#rating').fadeOut(400);	
+	$('#sex').fadeOut(400, clearForm);
 }
 
 function playerAdd()
@@ -66,23 +75,33 @@ function playerAdd()
 	// Sanity check.
 	if($('#fname').val() == '') {
 		alert('Dude... Enter a first name, tho.');
+		$('#fname').focus();
 		return;
 	}
 	else if($('#lname').val() == '') {
 		alert('Dude... Enter a last name, tho.');
+		$('#lname').focus();
 		return;
 	}
 	// Exclude the email check for now.
 	else if($('#ft').val() == null) {
 		alert('Dude... Enter a height, tho.');
+		$('#ft').focus();
 		return;
 	}
 	else if($('#in').val() == null) {
 		alert('Dude... Enter a height, tho.');
+		$('#in').focus();
 		return;
 	}
 	else if($('#rating').val() == null) {
 		alert('Dude... Enter a rating, tho.');
+		$('#rating').focus();
+		return;
+	}
+	else if($('#sex').val() == null) {
+		alert('Dude... Enter a gender, tho.')
+		$('#sex').focus();
 		return;
 	}
 
@@ -104,6 +123,7 @@ function playerAdd()
 	player.email = $('#email').val();
 	player.height = parseInt($('#ft').val())*12 + parseInt($('#in').val());
 	player.rating = parseFloat($('#rating').val())*2;
+	player.sex = parseInt($('#sex').val());
 
 	if(!checkDup(player.fname, player.lname)) {
 	  playerPool.push(player);
@@ -165,7 +185,7 @@ function renderTeams()
 	var players = shuffle(JSON.parse(localStorage.getItem('playerPool')), 200);
 
 	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
-	// so I'm not going to worry about O(5n) versus O(5n - x).
+	// so I'm not going to worry about O(9n) versus O(9n - x).
 	var r10 = getRatings(players, 10, true);
 	var r9 = getRatings(players, 9, true);
 	var r8 = getRatings(players, 8, true);
@@ -223,7 +243,7 @@ function renderTeams()
 
 	  	// Output the player.
 	  	var em = (elem.email == "") ? "": ", " + elem.email;
-	  	$(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ")</span>");
+	  	$(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ", " + Math.floor(elem.height/12) + "ft." + elem.height%12 + "in.)</span>");
 	  };
 	};
 }
@@ -347,4 +367,25 @@ function sessionCheck()
 function teamRegen()
 {
 	window.location.href="teams.html?num_teams=" + getURLParameter('num_teams');
+}
+
+function sortBySex(list_players)
+{
+	// This will sort the input array with women first, O(n) complexity for those who care.
+	var lastw = 0; // last woman in the front of the array
+
+	for (var i = 0; i < list_players.length; i++) {
+	  if(list_players[i].sex == SexEnum.FEMALE) {
+	  	// Swap if elements aren't the same. Otherwise
+	  	// just increment lastw.
+	  	if(i != lastw) {
+	  	  var temp = list_players[i];
+	  	  list_players[i] = list_players[lastw];
+	  	  list_players[lastw] = temp;
+	    }
+	    lastw++;
+	  }
+	};
+
+	return list_players;
 }
