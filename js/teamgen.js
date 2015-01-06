@@ -70,39 +70,49 @@ function addComplete()
 	$('#sex').fadeOut(400, clearForm);
 }
 
-function playerAdd()
+function checkFields()
 {
-	// Sanity check.
 	if($('#fname').val() == '') {
-		alert('Dude... Enter a first name, tho.');
-		$('#fname').focus();
-		return;
+	  alert('Dude... Enter a first name, tho.');
+	  $('#fname').focus();
+	  return false;
 	}
 	else if($('#lname').val() == '') {
-		alert('Dude... Enter a last name, tho.');
-		$('#lname').focus();
-		return;
+	  alert('Dude... Enter a last name, tho.');
+	  $('#lname').focus();
+	  return false;
 	}
 	// Exclude the email check for now.
 	else if($('#ft').val() == null) {
-		alert('Dude... Enter a height, tho.');
-		$('#ft').focus();
-		return;
+	  alert('Dude... Enter a height, tho.');
+	  $('#ft').focus();
+	  return false;
 	}
 	else if($('#in').val() == null) {
-		alert('Dude... Enter a height, tho.');
-		$('#in').focus();
-		return;
+	  alert('Dude... Enter a height, tho.');
+	  $('#in').focus();
+	  return false;
 	}
 	else if($('#rating').val() == null) {
-		alert('Dude... Enter a rating, tho.');
-		$('#rating').focus();
-		return;
+	  alert('Dude... Enter a rating, tho.');
+	  $('#rating').focus();
+	  return false;
 	}
 	else if($('#sex').val() == null) {
-		alert('Dude... Enter a gender, tho.')
-		$('#sex').focus();
-		return;
+	  alert('Dude... Enter a gender, tho.')
+	  $('#sex').focus();
+	  return false;
+	}
+	else {
+	  return true;
+	}
+}
+
+function playerAdd()
+{
+	// Sanity check.
+	if(!checkFields()) {
+	  return;
 	}
 
 	// Local vars for team.
@@ -183,6 +193,10 @@ function renderTeams()
 	// Here, we shuffle the entries so that, when sorted by rank, the subsets are randomized.
 	// If needed, shuffle may then be used on each subset for further randomization.
 	var players = shuffle(JSON.parse(localStorage.getItem('playerPool')), 200);
+
+	if(players == null) {
+	  return;
+	}
 
 	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
 	// so I'm not going to worry about O(9n) versus O(9n - x).
@@ -279,6 +293,10 @@ function createCSV()
 
 function shuffle(deck, tolerance)
 {
+	if(deck == null) {
+	  return null;
+	}
+
 	var end = deck.length - 1;
 
 	for (var i = 0; i < tolerance; i++) {
@@ -303,6 +321,10 @@ function randomIntFromInterval(min, max)
 
 function getRatings(deck, rating, randomize)
 {
+	if(deck == null) {
+	  return [];
+	}
+
 	var new_deck = [];
 	for (var i = 0; i < deck.length; i++) {
 	  if(deck[i].rating == rating) {
