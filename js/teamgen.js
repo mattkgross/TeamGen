@@ -209,7 +209,7 @@ function renderTeams()
 				  shortest of the highest ranked players (so that if they end up looping back and getting
 				  an extra high rank, they will have a short and a tall instead of a tall and a medium).
 				- An important note: when teams are sorted by height, randomness is GREATLY decreased,
-				  as the only thing that can now vary is the order of people with the same rank and height.
+				  as the only thing that can now vary is the order of people with the same sex, rank, and height.
 		- For men, iterate from team 1 to x.
 			- Assign players in the following order by ratng: 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5
 		- For women, iterate from team x to 1, and assign in the same way.
@@ -220,6 +220,7 @@ function renderTeams()
 
 	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
 	// so I'm not going to worry about O(9n) versus O(9n - x).
+	// Split by ratings.
 
 	// Men
 	var m_r10 = getRatings(men, 10, true);
@@ -242,6 +243,31 @@ function renderTeams()
 	var w_r4 = getRatings(women, 4, true);
 	var w_r3 = getRatings(women, 3, true);
 	var w_r2 = getRatings(women, 2, true);
+
+	// Sort each rating subset by height.
+	if(height_sort == "on") {
+	  // Men
+	  sortByHeight(m_r10, 0, m_r10.length-1);
+	  sortByHeight(m_r9, 0, m_r9.length-1);
+	  sortByHeight(m_r8, 0, m_r8.length-1);
+	  sortByHeight(m_r7, 0, m_r7.length-1);
+	  sortByHeight(m_r6, 0, m_r6.length-1);
+	  sortByHeight(m_r5, 0, m_r5.length-1);
+	  sortByHeight(m_r4, 0, m_r4.length-1);
+	  sortByHeight(m_r3, 0, m_r3.length-1);
+	  sortByHeight(m_r2, 0, m_r2.length-1);
+
+	  // Women
+	  sortByHeight(w_r10, 0, w_r10.length-1);
+	  sortByHeight(w_r9, 0, w_r9.length-1);
+	  sortByHeight(w_r8, 0, w_r8.length-1);
+	  sortByHeight(w_r7, 0, w_r7.length-1);
+	  sortByHeight(w_r6, 0, w_r6.length-1);
+	  sortByHeight(w_r5, 0, w_r5.length-1);
+	  sortByHeight(w_r4, 0, w_r4.length-1);
+	  sortByHeight(w_r3, 0, w_r3.length-1);
+	  sortByHeight(w_r2, 0, w_r2.length-1);
+	}
 
 	// Make the relevant teams visible.
 	for(var i = 1; i <= num_teams; i++) {
@@ -423,11 +449,49 @@ function sortBySex(list_players, pref_sex)
 	*/
 }
 
-function sortByHeight(list_players)
+function sortByHeight(list_players, start, end)
 {
-	// Sort by height ascending.
+	// Sort by height ascending. 
+	// CAUTION: list_players, being an object array
+	// IS MUTABLE and therefore WILL BE CHANGED.
 	// Feeling ambitious - quick sort anyone?
-	
+
+	// Quick Sort
+	// Best: O(nlog(n))
+	// Worst: O(n^2)
+	// Average: O(nlog(n))
+	// Space complexity: log(n)
+	if(Math.abs(start - end) < 2) {
+	  return;
+	}
+
+	var temp;
+	var i = start;
+	var j = end;
+	var pivot = list_players[Math.floor((start + end) / 2)].height;
+
+	// Partition
+	while (i <= j)
+	{
+        while (list_players[i].height < pivot)
+              i++;
+        while (list_players[j].height > pivot)
+              j--;
+        if (i <= j) 
+		{
+              temp = list_players[i];
+              list_players[i] = list_players[j];
+              list_players[j] = temp;
+              i++;
+              j--;
+		}
+	}
+
+	// Recursion
+	if (start < j)
+		sortByHeight(list_players, start, j);
+	if (i < end)
+		sortByHeight(list_players, i, end);
 }
 
 function assignPlayers(r2, r3, r4, r5, r6, r7, r8, r9, r10, num_teams, sex_type)
