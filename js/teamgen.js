@@ -178,6 +178,7 @@ function renderTeams()
 {
 	var num_teams = getURLParameter('num_teams');
 	var csv_dl = getURLParameter('csv_dl');
+	var height_sort = getURLParameter('height_sort');
 
 	if(num_teams == null) {
 		alert('Dude... you need to select how many teams you want to create.');
@@ -198,17 +199,49 @@ function renderTeams()
 	  return;
 	}
 
+	/*
+	This is the bulk of the logic. How do we fairly sort all of these people into, more or less, even teams?
+	The strategy is as follows:
+		- Split into men & women.
+			- Create subsets within these two sets for each ranking
+				- Within these ranking subsets, sort by height (if requested). Height will be sorted in
+				  *ascending* order. That way, the first team will get the highest ranked player, but the
+				  shortest of the highest ranked players (so that if they end up looping back and getting
+				  an extra high rank, they will have a short and a tall instead of a tall and a medium).
+				- An important note: when teams are sorted by height, randomness is GREATLY decreased,
+				  as the only thing that can now vary is the order of people with the same rank and height.
+		- For men, iterate from team 1 to x.
+			- Assign players in the following order by ratng: 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5
+		- For women, iterate from team x to 1, and assign in the same way.
+	*/
+
+	var men = sortBySex(players, SexEnum.MALE);
+	var women = sortBySex(players, SexEnum.FEMALE);	
+
 	// Could be more efficient by cutting down the array each time, but it should never be over a size of 200,
 	// so I'm not going to worry about O(9n) versus O(9n - x).
-	var r10 = getRatings(players, 10, true);
-	var r9 = getRatings(players, 9, true);
-	var r8 = getRatings(players, 8, true);
-	var r7 = getRatings(players, 7, true);
-	var r6 = getRatings(players, 6, true);
-	var r5 = getRatings(players, 5, true);
-	var r4 = getRatings(players, 4, true);
-	var r3 = getRatings(players, 3, true);
-	var r2 = getRatings(players, 2, true);
+
+	// Men
+	var m_r10 = getRatings(men, 10, true);
+	var m_r9 = getRatings(men, 9, true);
+	var m_r8 = getRatings(men, 8, true);
+	var m_r7 = getRatings(men, 7, true);
+	var m_r6 = getRatings(men, 6, true);
+	var m_r5 = getRatings(men, 5, true);
+	var m_r4 = getRatings(men, 4, true);
+	var m_r3 = getRatings(men, 3, true);
+	var m_r2 = getRatings(men, 2, true);
+
+	// Women
+	var w_r10 = getRatings(women, 10, true);
+	var w_r9 = getRatings(women, 9, true);
+	var w_r8 = getRatings(women, 8, true);
+	var w_r7 = getRatings(women, 7, true);
+	var w_r6 = getRatings(women, 6, true);
+	var w_r5 = getRatings(women, 5, true);
+	var w_r4 = getRatings(women, 4, true);
+	var w_r3 = getRatings(women, 3, true);
+	var w_r2 = getRatings(women, 2, true);
 
 	// Make the relevant teams visible.
 	for(var i = 1; i <= num_teams; i++) {
@@ -216,50 +249,11 @@ function renderTeams()
 	  $(t_name).css("display", "block");
 	};
 
-	while((r10.length + r9.length + r8.length + r7.length + r6.length + r5.length + r4.length + r3.length + r2.length) > 0) {
-	  for(var i = 1; i <= num_teams; i++) {
-	  	var cur_col = "#col" + i.toString();
-	  	var elem;
+	// Assign men first.
+	assignPlayers(m_r2, m_r3, m_r4, m_r5, m_r6, m_r7, m_r8, m_r9, m_r10, num_teams, SexEnum.MALE);
 
-	  	// To make this more even, we cycle through 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5.
-	  	// Otherwise, the 1st team will always have the best players
-	  	// whereas teams 2-12 may end up being the start of a new rank cycle.
-	  	if(r10.length > 0) {
-	  	  elem = r10.pop();
-	  	}
-	  	else if(r2.length > 0) {
-	  	  elem = r2.pop();
-	  	}
-	  	else if(r4.length > 0) {
-	  	  elem = r4.pop();
-	  	}
-	  	else if(r8.length > 0) {
-	  	  elem = r8.pop();
-	  	}
-	  	else if(r6.length > 0) {
-	  	  elem = r6.pop();
-	  	}
-	  	else if(r9.length > 0) {
-	  	  elem = r9.pop();
-	  	}
-	  	else if(r3.length > 0) {
-	  	  elem = r3.pop();
-	  	}
-	  	else if(r5.length > 0) {
-	  	  elem = r5.pop();
-	  	}
-	  	else if(r7.length > 0) {
-	  	  elem = r7.pop();
-	  	}
-	  	else {
-	  	  break;
-	  	}
-
-	  	// Output the player.
-	  	var em = (elem.email == "") ? "": ", " + elem.email;
-	  	$(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ", " + Math.floor(elem.height/12) + "ft." + elem.height%12 + "in.)</span>");
-	  };
-	};
+	// Assign women.
+	assignPlayers(w_r2, w_r3, w_r4, w_r5, w_r6, w_r7, w_r8, w_r9, w_r10, num_teams, SexEnum.FEMALE);
 }
 
 function createCSV()
@@ -388,11 +382,27 @@ function sessionCheck()
 
 function teamRegen()
 {
-	window.location.href="teams.html?num_teams=" + getURLParameter('num_teams');
+	window.location.href="teams.html?num_teams=" + getURLParameter('num_teams') + "&height_sort=" + getURLParameter('height_sort');
 }
 
-function sortBySex(list_players)
+function sortBySex(list_players, pref_sex)
 {
+	var res_sex = [];
+
+	if(list_players == null) {
+	  return;
+	}
+
+	for (var i = 0; i < list_players.length; i++) {
+	  if(list_players[i].sex == pref_sex) {
+	  	res_sex.push(list_players[i]);
+	  }
+	};
+
+	return res_sex;
+
+	// Orignal algorithm that simply sorts a given array.
+	/*
 	// This will sort the input array with women first, O(n) complexity for those who care.
 	var lastw = 0; // last woman in the front of the array
 
@@ -410,4 +420,111 @@ function sortBySex(list_players)
 	};
 
 	return list_players;
+	*/
+}
+
+function sortByHeight(list_players)
+{
+	// Sort by height ascending.
+	// Feeling ambitious - quick sort anyone?
+	
+}
+
+function assignPlayers(r2, r3, r4, r5, r6, r7, r8, r9, r10, num_teams, sex_type)
+{
+	if(sex_type == SexEnum.MALE) {
+	  while((r10.length + r9.length + r8.length + r7.length + r6.length + r5.length + r4.length + r3.length + r2.length) > 0) {
+	    for(var i = 1; i <= num_teams; i++) {
+	      var cur_col = "#col" + i.toString();
+		  var elem;
+
+		  // To make this more even, we cycle through 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5.
+		  // Otherwise, the 1st team will always have the best players
+		  // whereas teams 2-12 may end up being the start of a new rank cycle.
+		  if(r10.length > 0) {
+		    elem = r10.pop();
+		  }
+		  else if(r2.length > 0) {
+		    elem = r2.pop();
+		  }
+		  else if(r4.length > 0) {
+		    elem = r4.pop();
+		  }
+		  else if(r8.length > 0) {
+		    elem = r8.pop();
+		  }
+		  else if(r6.length > 0) {
+		    elem = r6.pop();
+		  }
+		  else if(r9.length > 0) {
+		    elem = r9.pop();
+		  }
+		  else if(r3.length > 0) {
+		    elem = r3.pop();
+		  }
+		  else if(r5.length > 0) {
+		    elem = r5.pop();
+		  }
+		  else if(r7.length > 0) {
+		    elem = r7.pop();
+		  }
+		  else {
+		    break;
+		  }
+
+		  // Output the player.
+		  var em = (elem.email == "") ? "": ", " + elem.email;
+		  $(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ", " + Math.floor(elem.height/12) + "ft." + elem.height%12 + "in.)</span>");
+		};
+	  };
+	}
+	else if(sex_type == SexEnum.FEMALE) {
+	  while((r10.length + r9.length + r8.length + r7.length + r6.length + r5.length + r4.length + r3.length + r2.length) > 0) {
+	    for(var i = num_teams; i > 0; i--) {
+	      var cur_col = "#col" + i.toString();
+		  var elem;
+
+		  // To make this more even, we cycle through 5, 1, 2, 4, 3, 4.5, 1.5, 2.5, 3.5.
+		  // Otherwise, the 1st team will always have the best players
+		  // whereas teams 2-12 may end up being the start of a new rank cycle.
+		  if(r10.length > 0) {
+		    elem = r10.pop();
+		  }
+		  else if(r2.length > 0) {
+		    elem = r2.pop();
+		  }
+		  else if(r4.length > 0) {
+		    elem = r4.pop();
+		  }
+		  else if(r8.length > 0) {
+		    elem = r8.pop();
+		  }
+		  else if(r6.length > 0) {
+		    elem = r6.pop();
+		  }
+		  else if(r9.length > 0) {
+		    elem = r9.pop();
+		  }
+		  else if(r3.length > 0) {
+		    elem = r3.pop();
+		  }
+		  else if(r5.length > 0) {
+		    elem = r5.pop();
+		  }
+		  else if(r7.length > 0) {
+		    elem = r7.pop();
+		  }
+		  else {
+		    break;
+		  }
+
+		  // Output the player.
+		  var em = (elem.email == "") ? "": ", " + elem.email;
+		  $(cur_col).append("<br><span data-toggle=\"tooltip\" data-placement=\"bottom\" data-container=\"body\" title=\"" + elem.fname + " " + elem.lname + em + ", " + Math.floor(elem.height/12) + "ft. " + elem.height%12 + "in., " + elem.rating + "\">" + elem.fname + " " + elem.lname + " (" + parseFloat(elem.rating)/2 + ", " + Math.floor(elem.height/12) + "ft." + elem.height%12 + "in.)</span>");
+		};
+	  };
+	}
+	else {
+	  throw "Unrecognized sex type enumeration.";
+	}
 }
