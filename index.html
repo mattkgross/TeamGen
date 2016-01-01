@@ -35,9 +35,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <meta name="description" content="Allows input of players and then creates teams with evenly distributed skill levels.">
+    <meta name="author" content="Matthew Gross">
 
     <title>TeamGen</title>
 
@@ -95,56 +94,58 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
       <div class="jumbotron">
         <h1 style="text-align: center;">Add Players</h1><br>
-        <div class="row">
-          <div class="col-lg-12">
-            <form class="form-inline">
-              <input type="text" class="form-control" id="fname" placeholder="First Name">&emsp;
-              <input type="text" class="form-control" id="lname" placeholder="Last Name">&emsp;
-              <input type="text" class="form-control" id="email" placeholder="Email">&emsp;
-              <select class="form-control" id="ft">
-                <option value="" selected disabled>ft.</option>
-                <option value="4">4'</option>
-                <option value="5">5'</option>
-                <option value="6">6'</option>
-              </select>&emsp;
-              <select class="form-control" id="in">
-                <option value="" selected disabled>in.</option>
-                <option value="0">0"</option>
-                <option value="1">1"</option>
-                <option value="2">2"</option>
-                <option value="3">3"</option>
-                <option value="4">4"</option>
-                <option value="5">5"</option>
-                <option value="6">6"</option>
-                <option value="7">7"</option>
-                <option value="8">8"</option>
-                <option value="9">9"</option>
-                <option value="10">10"</option>
-                <option value="11">11"</option>
-              </select>&emsp;
-              <select class="form-control" id="rating">
-                <option value="" selected disabled>Rating</option>
-                <option value="1.0">1.0</option>
-                <option value="1.5">1.5</option>
-                <option value="2.0">2.0</option>
-                <option value="2.5">2.5</option>
-                <option value="3.0">3.0</option>
-                <option value="3.5">3.5</option>
-                <option value="4.0">4.0</option>
-                <option value="4.5">4.5</option>
-                <option value="5.0">5.0</option>
-              </select>&emsp;
-              <select class="form-control" id="sex">
-                <option value="" selected disabled>Sex</option>
-                <option value="0">M</option>
-                <option value="1">F</option>
-              </select>
-            </form>
+        <div class="row" style="margin-bottom: 36px;">
+          <form class="form-inline">
+          <div class="col-lg-12" style="margin-bottom: 24px;">
+            <input type="text" class="form-control" id="fname" placeholder="First Name">&emsp;
+            <input type="text" class="form-control" id="lname" placeholder="Last Name">&emsp;
+            <input type="text" class="form-control" id="email" placeholder="Email">&emsp;
+            <select class="form-control" id="ft">
+              <option value="" selected disabled>ft.</option>
+              <option value="4">4'</option>
+              <option value="5">5'</option>
+              <option value="6">6'</option>
+            </select>&emsp;
+            <select class="form-control" id="in">
+              <option value="" selected disabled>in.</option>
+              <option value="0">0"</option>
+              <option value="1">1"</option>
+              <option value="2">2"</option>
+              <option value="3">3"</option>
+              <option value="4">4"</option>
+              <option value="5">5"</option>
+              <option value="6">6"</option>
+              <option value="7">7"</option>
+              <option value="8">8"</option>
+              <option value="9">9"</option>
+              <option value="10">10"</option>
+              <option value="11">11"</option>
+            </select>&emsp;
+            <select class="form-control" id="rating">
+              <option value="" selected disabled>Rating</option>
+              <option value="1.0">1.0</option>
+              <option value="1.5">1.5</option>
+              <option value="2.0">2.0</option>
+              <option value="2.5">2.5</option>
+              <option value="3.0">3.0</option>
+              <option value="3.5">3.5</option>
+              <option value="4.0">4.0</option>
+              <option value="4.5">4.5</option>
+              <option value="5.0">5.0</option>
+            </select>&emsp;
+            <select class="form-control" id="sex">
+              <option value="" selected disabled>Sex</option>
+              <option value="0">M</option>
+              <option value="1">F</option>
+            </select>
           </div>
+          <div class="col-lg-4 col-lg-offset-4" style="text-align: center;">
+            <label id="hs_check" style="font-weight: normal;"><input type="checkbox" id="hs_type" name="hs_type"> HS Player</label>&emsp;<label id="uni_check" style="font-weight: normal;"><input type="checkbox" id="uni_type" name="uni_type"> College Player</label>
+          </div>
+          </form>
           <div class="col-lg-10 col-lg-offset-1">
             <form class="form-inline">
-              <br><br>
-              <div class="form-actions" style="text-align: center;">
+              <div class="form-actions" style="text-align: center; margin-top: 30px;">
                 <button type="button" class="btn btn-primary" onclick="playerAdd()">Add Player</button>
                 <button type="button" class="btn btn-info" id="view_players">View Player List</button>
                 <button type="button" class="btn btn-default" onclick="clearForm()">Clear</button>
@@ -153,9 +154,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
           </div>
         </div>
 
-        <br><hr><br>
+        <hr>
 
-        <h1 style="text-align: center;">Generate Teams</h1><br>
+        <h1 style="text-align: center; margin-top: 50px;">Generate Teams</h1><br>
         <div class="row">
           <div class="col-lg-10 col-lg-offset-1">
             <form class="form-inline" action="teams.html" method="get">
@@ -175,7 +176,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
                   <option value="12">12</option>
                 </select>
                 <br><br>
-                <input type="checkbox" id="height_sort" name="height_sort"> Distribute height evenly. &emsp;<input type="checkbox" id="csv_dl" name="csv_dl"> Download Data as a CSV.
+                <input type="checkbox" id="height_sort" name="height_sort"> Distribute height evenly. &emsp;<input type="checkbox" id="csv_dl"> Download Data as a CSV.
                 <br><br>
                 <button type="submit" class="btn btn-primary" onclick="">Generate Teams</button>
                 <button type="button" class="btn btn-danger" onclick="startOver()">Delete Current Team</button>
@@ -186,7 +187,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
       </div>
 
       <footer class="footer">
-        <br><p style="text-align: center;">&copy; <a href="http://www.mattkgross.com" target="_blank">Matthew Gross</a> 2014</p>
+        <br><p style="text-align: center;">&copy; <a href="http://www.mattkgross.com" target="_blank">Matthew Gross</a> <script>document.write(new Date().getFullYear())</script></p>
       </footer>
 
       <!-- Modal -->
