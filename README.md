@@ -10,7 +10,7 @@ Installation Instructions
 
 Installing this tool is a simple 3 step process. You should be up in running in under a minute. :)
 
-1. Select your [desired release](/releases), and click the `Source code (zip)` link below it and save the file to a memorable location (such as your Desktop).
+1. Select your [desired release](https://github.com/mattkgross/TeamGen/releases), and click the `Source code (zip)` link below it and save the file to a memorable location (such as your Desktop).
 2. Unzip/extract the contents of the zip file.
 3. Open "index.html" in your preferred browser (Chrome or Firefox recommended; IE supported but not tested).
 
