@@ -193,6 +193,7 @@ function renderTeams()
     var num_teams = parseInt(getURLParameter('num_teams'));
     var csv_dl = getURLParameter('csv_dl');
     var height_sort = getURLParameter('height_sort');
+    var division_sort = getURLParameter('division_sort');
 
     if(num_teams == null) {
         alert('Dude... you need to select how many teams you want to create.');
@@ -234,12 +235,23 @@ function renderTeams()
             - For women, iterate from team x to 1, and assign in the same way.
     */
 
-    // Sort the player pool according to division.
-    var type_divided_players = [
-        getSortedSubset(players, "division", LevelEnum.NONE),
-        getSortedSubset(players, "division", LevelEnum.HS),
-        getSortedSubset(players, "division", LevelEnum.UNI)
-    ];
+    // Sort the player pool according to division if so requested.
+    var divided_players;
+    
+    // Partition per division.
+    if(division_sort == "on") {
+        divided_players = [
+            getSortedSubset(players, "division", LevelEnum.NONE),
+            getSortedSubset(players, "division", LevelEnum.HS),
+            getSortedSubset(players, "division", LevelEnum.UNI)
+        ];
+    }
+    // Or don't.
+    else {
+        divided_players = [
+            players
+        ];
+    }
     
     // Track where in team placing each iteration left off. Otherwise, team numbers will be uneven.
     var index_tracker = [
@@ -247,11 +259,11 @@ function renderTeams()
       num_teams  // Women start iterating from team n down
     ];
     
-    // Apply the rest of the sorting to the divided levels.
-    for(var i = LevelEnum.SIZE-1; i >= 0; i--)
+    // Apply the rest of the sorting to each partition of divided_players.
+    for(var i = divided_players.length-1; i >= 0; i--)
     {
-        var men = getSortedSubset(type_divided_players[i], "sex", SexEnum.MALE);
-        var women = getSortedSubset(type_divided_players[i], "sex", SexEnum.FEMALE);
+        var men = getSortedSubset(divided_players[i], "sex", SexEnum.MALE);
+        var women = getSortedSubset(divided_players[i], "sex", SexEnum.FEMALE);
         console.log(men);
         console.log(women);
 
