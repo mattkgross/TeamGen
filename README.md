@@ -5,9 +5,10 @@ Allows input of players and then creates teams with evenly distributed skill lev
 
 The main purpose of this tool is for indoor ultimate team generation. It's been done manually for too long. I'm also wanting to experiment with Local Storage in the browser, so please excuse the rather naïve methodology behind team storage. Yes, it's JSON, it's local, and it's ugly. But it should get the job done.
 
-<img src="https://www.colourbox.com/preview/10823150-vector-new-badge-black-icon.jpg" alt="New!" style="height: 20px; width: 20px;"/>Website
+[Website](http://teamgeneration.azurewebsites.net)
 ================
 
+New! You can now simply use the website, instead of downloading the files locally. If you still wish to run the site locally, proceed to the installation instructions. Otherwise, [go here](http://teamgeneration.azurewebsites.net)!
 
 Installation Instructions
 ================
