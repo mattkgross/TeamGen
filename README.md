@@ -10,6 +10,8 @@ The main purpose of this tool is for indoor ultimate team generation. It's been 
 
 New! You can now simply use the website, instead of downloading the files locally. If you still wish to run the site locally, proceed to the installation instructions. Otherwise, [go here](http://mattkgross.github.io/TeamGen)!
 
+In need of music for your event? [We've got you covered](https://open.spotify.com/user/mattkgross/playlist/4ungcVCFINkPPKijF3dZxl).
+
 Installation Instructions
 ================
 
